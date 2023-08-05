@@ -29,7 +29,7 @@ class GetAll extends Component {
                 <form onSubmit={this.getAll}>
                    
                     <p>{newEmployeelist}</p>
-                    <button type='submit' value='submit' >GetAll</button>
+                    <button type='submit' value='submit'>Find</button>
                 </form>
             
             </div>

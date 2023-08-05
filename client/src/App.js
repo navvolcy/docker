@@ -1,7 +1,6 @@
 //import logo from './logo.svg';
 import './App.css';
 import EmployeeList from './employeelist'
-import DeleteID from './deleteID';
 import GetAll from './getall';
 import React, {Component} from 'react'
 
@@ -18,7 +17,7 @@ import React, {Component} from 'react'
       avatar: ''
     };
 
-    this.handlechange = this.handlechange.bind(this);
+  
     this.handleName = this.handleName.bind(this);
     this.handleTitle = this.handleTitle.bind(this);
     this.handleAvatar = this.handleAvatar.bind(this);
@@ -42,9 +41,9 @@ import React, {Component} from 'react'
   }
 
    
-handlechange(event){
+/*handlechange(event){
   this.setState({value:event.target.value});
-}
+}*/
 
 handleName(event){
   this.setState({name:event.target.value});
@@ -66,7 +65,7 @@ handleSubmit(e){
       body: JSON.stringify({value: this.state.employee})
   }
   console.log(this.state.value)
-  fetch(`/employees/${this.state.value}`, requestOption)
+  fetch(`/employees/${this.state.name}`, requestOption)
   .then((response)=>response.json())
   .then(data =>{
     if(Object.keys(data).length > 0){
@@ -91,25 +90,31 @@ handleSubmit(e){
   return (
     <div className="App">
       <header className="App-header">
-        <p> This is the employee list: count:0</p>
-        <DeleteID></DeleteID>
+
         <GetAll></GetAll>
+        <from onSubmit={this.handleSubmit}>
+          <label>Name:
+            <input type='text' onChange={this.handleName} value={this.state.name}/>
+          </label>
+          <button>Search</button>
+        </from>
         <EmployeeList employees={this.state.employee}></EmployeeList>
         
         <form onSubmit={this.handleSubmit}>
-            <label htmlFor='id'> Id#
-            <input type='number' id='id' className='user' onChange={this.handlechange} value={this.state.value}/>
-            </label>
+           
             <label>Name: 
               <input type='text' onChange={this.handleName} value={this.state.name}/>
             </label>
+
             <label>Title: 
               <input type='text' onChange={this.handleTitle} value={this.state.title}/>
             </label>
+
             <label>Avatar: 
               <input type='text' onChange={this.handleAvatar} value={this.state.avatar}/>
             </label>
-            <button type='submit' value='Submit'>Find</button>
+
+            <button type='submit' value='Submit'>Search</button>
         </form>
         <button type='submit' value='Submit' onClick={this.handleClick}>Save</button>
      

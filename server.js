@@ -44,10 +44,10 @@ app.delete('/employees/:id', async (req, res) => {
      
 });
 
-app.post('/employees/:id', async (req, res) => {
-  console.log('here',req.params.id);
+app.post('/employees/:name', async (req, res) => {
+  console.log('here',req.params.name);
   const results = await dbClient
-  .query(`SELECT * FROM employees where employees.id = ${req.params.id}`)
+  .query(`SELECT * FROM employees where employees.name= ${req.params.name}`)
   res.send(JSON.stringify(results.rows));  
 });
 
