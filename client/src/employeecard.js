@@ -3,20 +3,22 @@ import DeleteID from './deleteID';
 
 class EmployeeCard extends Component {
 
+
+
   render() {
     return (
         <div className="card">
         
             <img
-                src={this.props.employee.avatar}
+                src={this.props.employee1.avatar}
                 alt="Avatar"
                 width="150px"
             />
             <div className="container">
-                <h4>{this.props.employee.name}</h4>
-                <p>{this.props.employee.title}</p>
+                <h4>{this.props.employee1.name}</h4>
+                <p>{this.props.employee1.title}</p>
             </div>
-            <DeleteID></DeleteID>
+            <DeleteID rmEmployee={this.props.employee1.id}></DeleteID>
         </div>
     )
   }

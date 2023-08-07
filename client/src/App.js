@@ -3,6 +3,8 @@ import './App.css';
 import EmployeeList from './employeelist'
 import GetAll from './getall';
 import React, {Component} from 'react'
+import EmployeeCard from './employeecard';
+
 
 
  class App extends Component {
@@ -11,21 +13,21 @@ import React, {Component} from 'react'
 
     this.state ={
       employee : [],
-      value: '',
+      Value:'',
       name: '',
       title: '',
       avatar: ''
     };
 
-  
     this.handleName = this.handleName.bind(this);
     this.handleTitle = this.handleTitle.bind(this);
     this.handleAvatar = this.handleAvatar.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
-
-  handleClick(){
+//Add new Employee to list 
+  handleClick(e){
+    e.preventDefault()
     const requestSave = {
       method: 'POST',
       headers:{'Content-Type': 'application/json'},
@@ -39,12 +41,7 @@ import React, {Component} from 'react'
     fetch('/employees', requestSave)
     
   }
-
-   
-/*handlechange(event){
-  this.setState({value:event.target.value});
-}*/
-
+  
 handleName(event){
   this.setState({name:event.target.value});
 }
@@ -57,29 +54,23 @@ handleAvatar(event){
   this.setState({avatar:event.target.value});
 }
 
+//search button by name API call to server
 handleSubmit(e){
   e.preventDefault()
   const requestOption = {
-      method:'POST',
-      headers:{'Content-Type': 'application/json'},
-      body: JSON.stringify({value: this.state.employee})
+    method:'POST',
+    headers:{'Content-Type': 'application/json'}
   }
-  console.log(this.state.value)
+  
   fetch(`/employees/${this.state.name}`, requestOption)
   .then((response)=>response.json())
-  .then(data =>{
-    if(Object.keys(data).length > 0){
-      this.setState({employee: data})
-      this.setState({name:data[0].name})
-      this.setState({title:data[0].title})
-      this.setState({avatar:data[0].avatar}) 
-    }
-    
+  .then(data =>{  
+      this.setState({employees:data})
   });
 }
 
   componentDidMount() {
-    fetch('/employees')
+    fetch('/employees') 
     .then((response) => response.json())
     .then(data => {
         this.setState({ employee: data });
@@ -87,21 +78,14 @@ handleSubmit(e){
   }
 
   render(){
+
   return (
     <div className="App">
       <header className="App-header">
 
         <GetAll></GetAll>
-        <from onSubmit={this.handleSubmit}>
-          <label>Name:
-            <input type='text' onChange={this.handleName} value={this.state.name}/>
-          </label>
-          <button>Search</button>
-        </from>
-        <EmployeeList employees={this.state.employee}></EmployeeList>
-        
+
         <form onSubmit={this.handleSubmit}>
-           
             <label>Name: 
               <input type='text' onChange={this.handleName} value={this.state.name}/>
             </label>
@@ -112,11 +96,14 @@ handleSubmit(e){
 
             <label>Avatar: 
               <input type='text' onChange={this.handleAvatar} value={this.state.avatar}/>
-            </label>
-
+            </label> 
+          
             <button type='submit' value='Submit'>Search</button>
+          
         </form>
-        <button type='submit' value='Submit' onClick={this.handleClick}>Save</button>
+        <button type='submit' value='Submit' onClick={this.handleClick} >New</button>
+        <EmployeeList employees={this.state.employee}></EmployeeList>
+        
      
         
       </header>

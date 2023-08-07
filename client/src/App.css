@@ -35,3 +35,8 @@ img {
   justify-content: center;
   color: white;
 }  
+
+.trash{
+   height: 20px;
+   width: 20px;
+}

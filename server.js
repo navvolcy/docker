@@ -36,21 +36,35 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
 });
 
-
+//delete
 app.delete('/employees/:id', async (req, res) => {
   const results = await dbClient
     .query(`DELETE FROM employees WHERE employees.id = ${req.params.id}`)
-    res.send(JSON.stringify(results));
-     
+    .then((payload) => {
+      return payload.rows;
+    })
+    .catch(() => {
+      throw new Error("Query failed");
+    });
+
+    res.send(JSON.stringify(results));     
 });
 
+//search 
 app.post('/employees/:name', async (req, res) => {
   console.log('here',req.params.name);
+ 
   const results = await dbClient
-  .query(`SELECT * FROM employees where employees.name= ${req.params.name}`)
-  res.send(JSON.stringify(results.rows));  
+    .query(`SELECT * FROM employees where employees.name= '${req.params.name}'`)
+    .then((payload) => {
+      return payload.rows;
+    })
+    .catch(() => {
+      throw new Error("Query failed");
+    });
+  res.send(JSON.stringify(results));  
 });
-
+//save
 app.post('/employees',async(req,res)=>{ 
 
    let query = `INSERT INTO public.employees (name, title, avatar) VALUES ('${req.body.userName}','${req.body.userTitle}','${req.body.userAvatar}')`;
