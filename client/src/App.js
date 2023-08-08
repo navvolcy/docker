@@ -3,7 +3,7 @@ import './App.css';
 import EmployeeList from './employeelist'
 import GetAll from './getall';
 import React, {Component} from 'react'
-import EmployeeCard from './employeecard';
+
 
 
 
@@ -16,7 +16,8 @@ import EmployeeCard from './employeecard';
       Value:'',
       name: '',
       title: '',
-      avatar: ''
+      avatar: '',
+      showHideForm: false
     };
 
     this.handleName = this.handleName.bind(this);
@@ -24,6 +25,8 @@ import EmployeeCard from './employeecard';
     this.handleAvatar = this.handleAvatar.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
+
+    this.hideElement = this.hideElement.bind(this);
   }
 //Add new Employee to list 
   handleClick(e){
@@ -65,7 +68,7 @@ handleSubmit(e){
   fetch(`/employees/${this.state.name}`, requestOption)
   .then((response)=>response.json())
   .then(data =>{  
-      this.setState({employees:data})
+      this.setState({employee:data})
   });
 }
 
@@ -77,7 +80,19 @@ handleSubmit(e){
     });
   }
 
+  hideElement(element){
+    console.log("hello", element);
+    switch (element){
+      case "showHideForm":
+        this.setState({showHideForm: !this.state.showHideForm});
+        break;
+      
+    }
+  }
+
   render(){
+
+  const showHideForm = this.state.showHideForm;
 
   return (
     <div className="App">
@@ -89,23 +104,43 @@ handleSubmit(e){
             <label>Name: 
               <input type='text' onChange={this.handleName} value={this.state.name}/>
             </label>
-
-            <label>Title: 
-              <input type='text' onChange={this.handleTitle} value={this.state.title}/>
-            </label>
-
-            <label>Avatar: 
-              <input type='text' onChange={this.handleAvatar} value={this.state.avatar}/>
-            </label> 
-          
             <button type='submit' value='Submit'>Search</button>
-          
         </form>
-        <button type='submit' value='Submit' onClick={this.handleClick} >New</button>
+       
+        <table>
+          {showHideForm &&(
+            <><tr>
+              <td>Name: </td>
+              <td>
+                <input type='text' onChange={this.handleName} value={this.state.name} />
+              </td>
+            </tr><tr>
+                <td>Title: </td>
+                <td>
+                  <input type='text' onChange={this.handleTitle} value={this.state.title} />
+                </td>
+              </tr><tr>
+                <td>Avatar: </td>
+                <td>
+                  <input type='text' onChange={this.handleAvatar} value={this.state.avatar} />
+                </td>
+                <td>
+                  <button type='submit' value='Submit' onClick={this.handleClick}>Save</button>
+                </td>
+              </tr></>
+            )}
+            <tr>
+              <td>
+                <button onClick={()=> this.hideElement("showHideForm")}>New</button>
+              </td>
+
+            </tr>
+        </table>
+    
+        
         <EmployeeList employees={this.state.employee}></EmployeeList>
         
      
-        
       </header>
     </div>
   );
