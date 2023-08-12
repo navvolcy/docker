@@ -1,14 +1,20 @@
-import React, {Component} from 'react'
-import EmployeeCard from './employeecard'
+import React, { Component } from "react";
+import EmployeeCard from "./employeecard";
 
 class EmployeeList extends Component {
-
   render() {
     return (
-        <div>
-            {this.props.employees.map(employee => <EmployeeCard key={employee.id} employee1={employee} />)} 
-        </div>
-    )
+      <div>
+        <h1> EmployeeList </h1>
+        {this.props.employees.map((employee) => (
+          <EmployeeCard
+            key={employee.id}
+            employee1={employee}
+            empUpdate={this.props.updateEmp}
+          />
+        ))}
+      </div>
+    );
   }
 }
 

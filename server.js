@@ -38,16 +38,20 @@ app.get('*', (req, res) => {
 });
 
 //inactive
-app.post('/employees/:id', async (req, res) => {
-  const results = await dbClient
-    .query(`UPDATE employees 
+app.post('/employees/status', async (req, res) => {
+  console.log(req.body);
+  const results = await dbClient.query(`UPDATE public.employees 
     SET active = '${req.body.userStatus}'
-    WHERE employees.id = ${req.params.id}`)
-    const result2 = await dbClient 
-    .query(`SELECT * FROM employees
-    WHERE active = true`)
-    res.send(JSON.stringify(result2));
-        
+    WHERE employees.id = ${req.body.employee.id}`);
+  // const result2 = await dbClient
+  // .query(`SELECT * FROM public.employees
+  // WHERE active = true`)
+
+  // find out what is being returned from this? --> console.log(results.rows);
+  // if it sends back the updated rows than you have do the second query to `SELECT * from 'public.employee
+  console.log(results.rows)
+
+  // res.send(JSON.stringify(result.rows));
 });
 
 //search 
