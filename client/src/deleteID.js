@@ -6,23 +6,18 @@ class DeleteID extends Component {
         this.state = { employee: [],
         status: false
     };
-        this.handleDeactivate = this.handleDeactivate.bind(this);
-        this.handleActivate = this.handleActivate.bind(this);
-        //this.toggleButton = this.toggleButton.bind(this);
+        this.handleStatus = this.handleStatus.bind(this);
+    
            
     }
 
 
-    /*toggleButton(){
-        this.setState({status: !this.state.status})
-    }*/
     
-   async handleDeactivate(){
-        
+   async handleStatus(status){        
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userStatus: !this.state.status})
+            body: JSON.stringify({ userStatus: this.state.status})
         };
         fetch(`/employees/${this.props.rmEmployee}`, requestOptions)
         .then((response) => response.json())
@@ -32,20 +27,7 @@ class DeleteID extends Component {
         }); 
     }
 
-    async handleActivate(){
-        
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userStatus: this.state.status})
-        };
-        fetch(`/employees/${this.props.rmEmployee}`, requestOptions)
-        .then((response) => response.json())
-        .then(data => {
-        this.setState({ employees: data });  
-        
-        }); 
-    }
+   
 
     render(){
 
@@ -53,7 +35,7 @@ class DeleteID extends Component {
         return(
             <div>                  
 
-                <button onClick={this.state.status === false ?  this.handleDeactivate : this.handleActivate }>
+                <button onClick={this.handleStatus(this.state.status) }>
                     {this.state.status === false ? "Deactivate" : "Activate"}
                     
                 </button>

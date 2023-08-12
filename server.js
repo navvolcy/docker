@@ -41,38 +41,13 @@ app.get('*', (req, res) => {
 app.post('/employees/:id', async (req, res) => {
   const results = await dbClient
     .query(`UPDATE employees 
-    SET active = true
+    SET active = '${req.body.userStatus}'
     WHERE employees.id = ${req.params.id}`)
     const result2 = await dbClient 
     .query(`SELECT * FROM employees
     WHERE active = true`)
-    .then((payload) => {
-      return payload.rows;
-    })
-    .catch(() => {
-      throw new Error("True Query failed");
-    });
-    
     res.send(JSON.stringify(result2));
         
-});
-//active 
-app.post('/employees/:id', async (req, res) => {
-  const results = await dbClient
-    .query(`UPDATE employees
-    SET active = false
-    WHERE employees.id = ${req.params.id}`)
-    const result2 = await dbClient 
-    .query(`SELECT * FROM employees
-    WHERE active = false`)
-    .then((payload) => {
-      return payload.rows;
-    })
-    .catch(() => {
-      throw new Error("false Query failed");
-    });
-
-    res.send(JSON.stringify(result2));     
 });
 
 //search 
