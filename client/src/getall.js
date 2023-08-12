@@ -7,13 +7,20 @@ class GetAll extends Component {
     constructor(props){
         super(props);
         this.state= {
-            employees:[]
+            employees:[],
+            checked: false
         }
         this.getAll = this.getAll.bind(this);
+        this.isChecked = this.isChecked.bind(this);
+    }
+
+    isChecked(event){
+        this.setState({checked:!event.target.value})
     }
 
     getAll() {
-        fetch(`/employees`)
+        console.log("get all")
+        fetch(`/employees/${this.state.checked}`)
         .then((response) => response.json())
         .then(data => {
             this.setState({ employees: data });
@@ -22,14 +29,16 @@ class GetAll extends Component {
         
     render(){
      
-       const newEmployeelist = this.state.employees.map(employee => <EmployeeCard key={employee.id} employee={employee}/>)
-        
+     
+       const activeEmployeelist = this.state.employees.map(employee => <EmployeeCard key={employee.id} employee={employee}/>)
+       
         return(
             <div>
                 <form onSubmit={this.getAll}>
                    
-                    <p>{newEmployeelist}</p>
+                    <p>{activeEmployeelist}</p>
                     <button type='submit' value='submit'>Find</button>
+                    <input type='checkbox' id='checkbox' onChange={this.isChecked} value={this.state.checked}/>
                 </form>
             
             </div>

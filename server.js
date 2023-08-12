@@ -18,9 +18,10 @@ app.use(express.static('client/build'));
 
 app.use(express.json())
 
-app.get("/employees", async (req, res) => {
+app.get("/employees/:active", async (req, res) => {
   const results = await dbClient
-    .query("SELECT * FROM employees")
+    .query(`SELECT * FROM employees
+    WHERE active = '${req.params.active}' `)
     .then((payload) => {
       return payload.rows;
     })
@@ -36,18 +37,42 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
 });
 
-//delete
-app.delete('/employees/:id', async (req, res) => {
+//inactive
+app.post('/employees/:id', async (req, res) => {
   const results = await dbClient
-    .query(`DELETE FROM employees WHERE employees.id = ${req.params.id}`)
+    .query(`UPDATE employees 
+    SET active = true
+    WHERE employees.id = ${req.params.id}`)
+    const result2 = await dbClient 
+    .query(`SELECT * FROM employees
+    WHERE active = true`)
     .then((payload) => {
       return payload.rows;
     })
     .catch(() => {
-      throw new Error("Query failed");
+      throw new Error("True Query failed");
+    });
+    
+    res.send(JSON.stringify(result2));
+        
+});
+//active 
+app.post('/employees/:id', async (req, res) => {
+  const results = await dbClient
+    .query(`UPDATE employees
+    SET active = false
+    WHERE employees.id = ${req.params.id}`)
+    const result2 = await dbClient 
+    .query(`SELECT * FROM employees
+    WHERE active = false`)
+    .then((payload) => {
+      return payload.rows;
+    })
+    .catch(() => {
+      throw new Error("false Query failed");
     });
 
-    res.send(JSON.stringify(results));     
+    res.send(JSON.stringify(result2));     
 });
 
 //search 
@@ -77,3 +102,18 @@ dbClient.connect();
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
+
+
+/*app.post('/employees/:id', async (req, res) => {
+  const results = await dbClient
+    .query(`INSERT INTO employees (status) VALUES ('${req.body.userStatus}')
+    WHERE employees.id = ${req.params.id}`)
+    .then((payload) => {
+      return payload.rows;
+    })
+    .catch(() => {
+      throw new Error("Query failed") ;
+    });
+
+    res.send(JSON.stringify(results));     
+});*/

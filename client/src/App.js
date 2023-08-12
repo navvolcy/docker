@@ -17,6 +17,7 @@ import React, {Component} from 'react'
       name: '',
       title: '',
       avatar: '',
+      status: true,
       showHideForm: false
     };
 
@@ -28,7 +29,7 @@ import React, {Component} from 'react'
 
     this.hideElement = this.hideElement.bind(this);
   }
-//Add new Employee to list 
+
   handleClick(e){
     e.preventDefault()
     const requestSave = {
@@ -40,6 +41,7 @@ import React, {Component} from 'react'
          userAvatar: this.state.avatar
       })
     }
+
     console.log('hello', requestSave)
     fetch('/employees', requestSave)
     
@@ -73,11 +75,14 @@ handleSubmit(e){
 }
 
   componentDidMount() {
-    fetch('/employees') 
+    console.log("start up");
+  
+    fetch(`/employees/${this.state.status}`) 
     .then((response) => response.json())
     .then(data => {
         this.setState({ employee: data });
     });
+   
   }
 
   hideElement(element){
@@ -95,6 +100,7 @@ handleSubmit(e){
   const showHideForm = this.state.showHideForm;
 
   return (
+     
     <div className="App">
       <header className="App-header">
 
